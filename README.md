@@ -4,6 +4,11 @@ This is a full-stack MERN (MongoDB, Express.js, React.js, Node.js) project for m
 
 ---
 
+## Live Demo  
+🔗 [Live Demo](https://machine-task-jewellery.vercel.app/)
+
+---
+
 ## **Features**  
 
 ✅ User Authentication (JWT) – Login, Signup  
