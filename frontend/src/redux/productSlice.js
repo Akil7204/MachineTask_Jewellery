@@ -1,18 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Fetch Products with Pagination, Search, Sorting
+
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async ({ page = 1, search = "", sortBy = "", order = "asc" }, { rejectWithValue, getState }) => {
     try {
       const token = getState().auth.token;
-      const res = await axios.get("http://localhost:5000/api/products", {
-        params: { page, search, sortBy, order }, // ✅ Query params
+      const res = await axios.get("https://machinetask-jewellery.onrender.com/api/products", {
+        params: { page, search, sortBy, order },
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      return res.data; // ✅ Response contains { products, currentPage, totalPages, totalProducts }
+      return res.data;
     } catch (err) {
       return rejectWithValue("Failed to load products");
     }
@@ -22,10 +22,10 @@ export const fetchProducts = createAsyncThunk(
 // Create Product
 export const addProduct = createAsyncThunk("products/addProduct", async (formData, { rejectWithValue }) => {
   try {
-    const token = localStorage.getItem("token"); // Get JWT token
+    const token = localStorage.getItem("token");
     const config = { headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } };
 
-    const response = await axios.post("http://localhost:5000/api/products", formData, config);
+    const response = await axios.post("https://machinetask-jewellery.onrender.com/api/products", formData, config);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || "Something went wrong");
@@ -39,7 +39,7 @@ export const updateProduct = createAsyncThunk(
       const token = localStorage.getItem("token");
       const config = { headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } };
 
-      const response = await axios.put(`http://localhost:5000/api/products/${productId}`, formData, config);
+      const response = await axios.put(`https://machinetask-jewellery.onrender.com/api/products/${productId}`, formData, config);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to update product");
@@ -51,12 +51,12 @@ export const updateProduct = createAsyncThunk(
 export const deleteProduct = createAsyncThunk("products/deleteProduct", async (productId, { rejectWithValue }) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.delete(`http://localhost:5000/api/products/${productId}`, {
+    const response = await axios.delete(`https://machinetask-jewellery.onrender.com/api/products/${productId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
     if (response.status !== 200) throw new Error("Failed to delete product");
-    return productId; // ✅ Return the deleted product's ID
+    return productId;
   } catch (error) {
     return rejectWithValue(error.message);
   }
@@ -81,7 +81,7 @@ const productSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload.products; // ✅ Store only products array
+        state.items = action.payload.products;
         state.currentPage = action.payload.currentPage;
         state.totalPages = action.payload.totalPages;
         state.totalProducts = action.payload.totalProducts;
@@ -91,7 +91,7 @@ const productSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(addProduct.fulfilled, (state, action) => {
-        state.items.push(action.payload); // ✅ Add new product to state
+        state.items.push(action.payload);
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.items = state.items.map((product) =>
@@ -99,7 +99,7 @@ const productSlice = createSlice({
         );
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
-        state.items = state.items.filter((product) => product._id !== action.payload); // ✅ Remove deleted product
+        state.items = state.items.filter((product) => product._id !== action.payload);
       });
   },
 });

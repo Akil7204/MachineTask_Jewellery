@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
+//http://localhost:5000/api/auth/signup
 // Signup Action
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
+      const response = await fetch("https://machinetask-jewellery.onrender.com/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -28,7 +28,7 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch("https://machinetask-jewellery.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -39,7 +39,7 @@ export const loginUser = createAsyncThunk(
         throw new Error(data.message || "Login failed");
       }
 
-      localStorage.setItem("token", data.token); // Store token in localStorage
+      localStorage.setItem("token", data.token); 
       return data;
     } catch (error) {
       return rejectWithValue(error.message);

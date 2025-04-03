@@ -46,7 +46,9 @@ exports.getProducts = async (req, res) => {
 
     const updatedProducts = products.map((product) => ({
       ...product.toObject(),
-      image: product.image ? `http://localhost:5000/${product.image.replace(/\\/g, "/")}` : null,
+      // https://machinetask-jewellery.onrender.com
+      image: product.image ? `https://machinetask-jewellery.onrender.com/${product.image.replace(/\\/g, "/")}` : null,
+      // image: product.image ? `http://localhost:5000/${product.image.replace(/\\/g, "/")}` : null,
     }));
 
     res.json({
@@ -84,7 +86,6 @@ exports.updateProduct = async (req, res) => {
       product.image = req.file.path;
     }
 
-    // Update product details
     product.name = name || product.name;
     product.price = price || product.price;
     product.stock = stock || product.stock;
@@ -92,7 +93,6 @@ exports.updateProduct = async (req, res) => {
     product.category = category || product.category;
     product.manufacturingDate = manufacturingDate || product.manufacturingDate;
 
-    // Save updated product
     await product.save();
 
     res.status(200).json({ message: "Product updated successfully", product });
